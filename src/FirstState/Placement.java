@@ -102,9 +102,46 @@ public class Placement extends AbstractAppState {
        
         settler =this.getSettler(); 
         if(settler.getAsteroid() == null)
-            settler.setAsteroid(curAsteroid);
+        settler.setAsteroid(curAsteroid);
        
-        localRootNode.attachChild(loadSky());
+        
+        this.loadSky();
+         // sun and ambient light
+        
+        DirectionalLight sun = new DirectionalLight();
+        sun.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.01f).mult(0.8f));
+        sun.setDirection(new Vector3f(-1f,0f,0f).normalizeLocal());
+        AsteroidNode.addLight(sun);
+        
+        AmbientLight amb = new AmbientLight();
+        amb.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.1f).mult(0.6f));
+        AsteroidNode.addLight(amb);
+        
+        
+        
+        ambiant = new AmbientLight();
+             ambiant.setColor(new ColorRGBA(0.4f,0.9f,1f,1f).mult(1f));
+            
+        selectedNode.addLight(ambiant);
+        
+            
+        ambiantCur = new AmbientLight();
+        ambiantCur.setColor(new ColorRGBA(0.5f,1.5f,2f,0.5f).mult(1.5f));
+
+        curAsteroidNode.addLight(ambiantCur);
+                       
+        
+        
+           spot = new SpotLight();
+            spot.setSpotRange(25f);                           // distance
+            spot.setSpotInnerAngle(25f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
+            spot.setSpotOuterAngle(50f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
+              
+            spot.setColor(new ColorRGBA(2.6f,0.4f,3.7f,0.01f).mult(15f));   
+                       
+            curAsteroidNode.addLight(spot);
+
+        
         localRootNode.attachChild(AsteroidNode);
         AsteroidNode.attachChild(selectedNode);
         AsteroidNode.attachChild(curAsteroidNode);
@@ -229,7 +266,7 @@ public class Placement extends AbstractAppState {
     
     
     
-    public Node loadSky(){
+    public void loadSky(){
         
         Node base = new Node("Sky");
        
@@ -243,44 +280,10 @@ public class Placement extends AbstractAppState {
         base.attachChild(SkyFactory.createSky(assetManager, west, east, north, south, up, down));
         
         
-        
-        // sun and ambient light
-        
-        DirectionalLight sun = new DirectionalLight();
-        sun.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.01f).mult(0.8f));
-        sun.setDirection(new Vector3f(-1f,0f,0f).normalizeLocal());
-        AsteroidNode.addLight(sun);
-        
-        AmbientLight amb = new AmbientLight();
-        amb.setColor(new ColorRGBA(0.9f,1.0f,0.9f,0.1f).mult(0.6f));
-        AsteroidNode.addLight(amb);
-        
-        
-        
-        ambiant = new AmbientLight();
-             ambiant.setColor(new ColorRGBA(0.4f,0.9f,1f,1f).mult(1f));
-            
-        selectedNode.addLight(ambiant);
-        
-            
-        ambiantCur = new AmbientLight();
-        ambiantCur.setColor(new ColorRGBA(0.5f,1.5f,2f,0.5f).mult(1.5f));
-
-        curAsteroidNode.addLight(ambiantCur);
-                       
-        
-        
-           spot = new SpotLight();
-            spot.setSpotRange(25f);                           // distance
-            spot.setSpotInnerAngle(25f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
-            spot.setSpotOuterAngle(50f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
-              
-            spot.setColor(new ColorRGBA(2.6f,0.4f,3.7f,0.01f).mult(15f));   
-                       
-            curAsteroidNode.addLight(spot);
+     
 
 
-        return base;
+       localRootNode.attachChild(base);
     }
     
     
